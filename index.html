@@ -1,0 +1,471 @@
+
+
+<!DOCTYPE html>
+
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meine sichere Startseite</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0f0f13; --surface: #18181f; --border: #2a2a38;
+      --accent: #c8a96e; --accent2: #7eb8a4; --text: #e8e4dc;
+      --muted: #7a7880; --danger: #e07070;
+    }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg); color: var(--text);
+      min-height: 100vh; padding: 2rem 1.5rem 4rem;
+      background-image:
+        radial-gradient(ellipse 60% 40% at 80% 10%, rgba(200,169,110,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 10% 80%, rgba(126,184,164,0.06) 0%, transparent 60%);
+    }
+    header {
+      max-width: 900px; margin: 0 auto 1.5rem;
+      display: flex; align-items: baseline; justify-content: space-between;
+      border-bottom: 1px solid var(--border); padding-bottom: 1.2rem;
+    }
+    header h1 { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--accent); letter-spacing: -0.02em; }
+    header p { font-size: 0.78rem; color: var(--muted); font-weight: 300; }
+    .shield { display: inline-block; margin-right: 0.4rem; font-size: 1.1rem; }
+
+```
+/* ── Suchfeld ── */
+.search-wrap {
+  max-width: 900px; margin: 0 auto 2rem;
+  position: relative;
+}
+.search-wrap input {
+  width: 100%; padding: 0.75rem 1rem 0.75rem 2.8rem;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; color: var(--text); font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem; outline: none; transition: border-color 0.2s;
+}
+.search-wrap input:focus { border-color: var(--accent); }
+.search-wrap input::placeholder { color: var(--muted); }
+.search-icon {
+  position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%);
+  font-size: 1rem; pointer-events: none;
+}
+.search-count {
+  position: absolute; right: 0.9rem; top: 50%; transform: translateY(-50%);
+  font-size: 0.72rem; color: var(--muted);
+}
+.no-results {
+  max-width: 900px; margin: 0 auto;
+  text-align: center; color: var(--muted); font-size: 0.9rem;
+  padding: 2rem; display: none;
+}
+
+main {
+  max-width: 900px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem;
+}
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 1.4rem 1.4rem 1.2rem;
+  transition: border-color 0.2s, transform 0.2s;
+  animation: fadeUp 0.4s ease both;
+}
+.card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.card.hidden { display: none; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.card-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; }
+.card-icon { width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; font-size: 1rem; flex-shrink: 0; }
+.card-title { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: var(--text); }
+.c-gold  .card-icon { background: rgba(200,169,110,0.15); }
+.c-teal  .card-icon { background: rgba(126,184,164,0.15); }
+.c-red   .card-icon { background: rgba(224,112,112,0.15); }
+.c-blue  .card-icon { background: rgba(110,160,210,0.15); }
+.c-purple .card-icon { background: rgba(170,130,210,0.15); }
+.c-green .card-icon { background: rgba(130,200,140,0.15); }
+ul { list-style: none; }
+ul li { margin-bottom: 0.3rem; }
+ul li.hidden { display: none; }
+ul li a {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.45rem 0.6rem; border-radius: 7px; text-decoration: none;
+  font-size: 0.875rem; color: var(--text); font-weight: 400;
+  transition: background 0.15s, color 0.15s; word-break: break-all;
+}
+ul li a:hover { background: rgba(255,255,255,0.06); color: var(--accent); }
+ul li a mark { background: rgba(200,169,110,0.3); color: var(--accent); border-radius: 2px; padding: 0 1px; }
+.favicon { width: 16px; height: 16px; border-radius: 3px; flex-shrink: 0; object-fit: contain; }
+.info-box {
+  max-width: 900px; margin: 2.5rem auto 0;
+  background: rgba(126,184,164,0.07); border: 1px solid rgba(126,184,164,0.2);
+  border-radius: 10px; padding: 1rem 1.4rem; font-size: 0.8rem; color: var(--muted); line-height: 1.6;
+}
+.info-box strong { color: var(--accent2); }
+.edit-note { max-width: 900px; margin: 1.2rem auto 0; font-size: 0.72rem; color: var(--muted); text-align: right; }
+.version-bar { max-width: 900px; margin: 1.5rem auto 0; text-align: center; font-size: 0.75rem; color: #4a4858; border-top: 1px solid #2a2a38; padding-top: 1rem; }
+```
+
+  </style>
+</head>
+<body>
+
+<header>
+  <h1><span class="shield">🛡</span> Meine Startseite</h1>
+  <p>Nur verifizierte Links — kein Phishing-Risiko</p>
+</header>
+
+<div class="search-wrap">
+  <span class="search-icon">🔍</span>
+  <input type="text" id="search" placeholder="Link suchen… z.B. „Saarland Versicherung"" autocomplete="off">
+  <span class="search-count" id="searchCount"></span>
+</div>
+
+<div class="no-results" id="noResults">Kein Link gefunden — vielleicht noch hinzufügen? 🤔</div>
+
+<main id="main">
+
+  <!-- BANK & FINANZEN -->
+
+  <div class="card c-gold">
+    <div class="card-header"><div class="card-icon">🏦</div><span class="card-title">Bank & Finanzen</span></div>
+    <ul>
+      <li><a href="https://www.bcee.lu" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=bcee.lu" alt="">BCEE / Spuerkeess Luxemburg</a></li>
+      <li><a href="https://www.bhw.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=bhw.de" alt="">BHW Bausparkasse</a></li>
+      <li><a href="https://www.dkb.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=dkb.de" alt="">DKB Online-Banking</a></li>
+      <li><a href="https://www.klarna.com/de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=klarna.com" alt="">Klarna</a></li>
+      <li><a href="https://www.lbs.de/standorte/merzig-saar_mzg" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=lbs.de" alt="">LBS Merzig (Bausparkasse)</a></li>
+      <li><a href="https://www.vb-rb.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=vb-rb.de" alt="">Meine Volksbank Raiffeisenbank</a></li>
+      <li><a href="https://www.paypal.com/de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=paypal.com" alt="">PayPal</a></li>
+      <li><a href="https://www.saarland-versicherungen.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=saarland-versicherungen.de" alt="">SAARLAND Versicherungen</a></li>
+      <li><a href="https://www.sparda-sw.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=sparda-sw.de" alt="">Sparda-Bank Südwest</a></li>
+      <li><a href="https://www.spkmw.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=spkmw.de" alt="">Sparkasse Merzig-Wadern</a></li>
+    </ul>
+  </div>
+
+  <!-- E-MAIL -->
+
+  <div class="card c-teal">
+    <div class="card-header"><div class="card-icon">✉️</div><span class="card-title">E-Mail</span></div>
+    <ul>
+      <li><a href="https://www.gmx.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=gmx.de" alt="">GMX</a></li>
+      <li><a href="https://mail.google.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=mail.google.com" alt="">Gmail</a></li>
+      <li><a href="https://outlook.live.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=outlook.live.com" alt="">Outlook / Hotmail</a></li>
+      <li><a href="https://posteo.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=posteo.de" alt="">Posteo</a></li>
+      <li><a href="https://mail.proton.me" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=proton.me" alt="">Proton Mail</a></li>
+      <li><a href="https://email.t-online.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=t-online.de" alt="">T-Online Mail</a></li>
+      <li><a href="https://app.tuta.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=tuta.com" alt="">Tuta Mail</a></li>
+      <li><a href="https://web.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=web.de" alt="">Web.de</a></li>
+      <li><a href="https://mail.yahoo.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=mail.yahoo.com" alt="">Yahoo Mail</a></li>
+    </ul>
+  </div>
+
+  <!-- EINKAUFEN -->
+
+  <div class="card c-red">
+    <div class="card-header"><div class="card-icon">🛒</div><span class="card-title">Einkaufen</span></div>
+    <ul>
+      <li><a href="https://www.aldi-sued.de/de/filialen-angebote/" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=aldi-sued.de" alt="">Aldi – Angebote & Öffnungszeiten</a></li>
+      <li><a href="https://www.amazon.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=amazon.de" alt="">Amazon</a></li>
+      <li><a href="https://www.dm.de/filialen/saarland/merzig/" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=dm.de" alt="">dm Merzig</a></li>
+      <li><a href="https://www.ebay.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=ebay.de" alt="">eBay</a></li>
+      <li><a href="https://www.kleinanzeigen.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=kleinanzeigen.de" alt="">eBay Kleinanzeigen</a></li>
+      <li><a href="https://www.edeka.de/service/filialen/index.jsp?searchTerm=Merzig" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=edeka.de" alt="">EDEKA Merzig</a></li>
+      <li><a href="https://www.kaufland.de/service/filialen/detail/merzig/" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=kaufland.de" alt="">Kaufland Merzig</a></li>
+      <li><a href="https://www.netto-online.de/service/filialen/" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=netto-online.de" alt="">Netto – Filialen & Angebote</a></li>
+      <li><a href="https://www.rewe.de/service/finden/?q=Merzig" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=rewe.de" alt="">REWE Merzig</a></li>
+      <li><a href="https://www.shop-apotheke.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=shop-apotheke.com" alt="">Shop Apotheke</a></li>
+      <li><a href="https://www.wasgau.de/maerkte/wasgau-frischemarkt-merzig-ballern/" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=wasgau.de" alt="">WASGAU Merzig-Ballern</a></li>
+      <li><a href="https://www.zalando.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=zalando.de" alt="">Zalando</a></li>
+      <li><a href="https://www.lidl.de/de/angebote" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=lidl.de" alt="">Lidl – Angebote & Filialen</a></li>
+    </ul>
+  </div>
+
+  <!-- SOZIALES & KOMMUNIKATION -->
+
+  <div class="card c-blue">
+    <div class="card-header"><div class="card-icon">💬</div><span class="card-title">Soziales & Kommunikation</span></div>
+    <ul>
+      <li><a href="https://app.element.io" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=element.io" alt="">Element</a></li>
+      <li><a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=facebook.com" alt="">Facebook</a></li>
+      <li><a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=instagram.com" alt="">Instagram</a></li>
+      <li><a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=linkedin.com" alt="">LinkedIn</a></li>
+      <li><a href="https://signal.org" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=signal.org" alt="">Signal</a></li>
+      <li><a href="https://web.whatsapp.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=web.whatsapp.com" alt="">WhatsApp Web</a></li>
+      <li><a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=youtube.com" alt="">YouTube</a></li>
+    </ul>
+  </div>
+
+  <!-- NACHRICHTEN & INFO -->
+
+  <div class="card c-green">
+    <div class="card-header"><div class="card-icon">📰</div><span class="card-title">Nachrichten & Info</span></div>
+    <ul>
+      <li><a href="https://www.merzig.de/rathaus-buergerservice/neues-aus-merzig/" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=merzig.de" alt="">Neues aus Merzig</a></li>
+      <li><a href="https://www.n-tv.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=n-tv.de" alt="">n-tv</a></li>
+      <li><a href="https://www.saarbruecker-zeitung.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=saarbruecker-zeitung.de" alt="">Saarbrücker Zeitung</a></li>
+      <li><a href="https://www.merzig.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=merzig.de" alt="">Stadt Merzig</a></li>
+      <li><a href="https://www.spiegel.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=spiegel.de" alt="">Der Spiegel</a></li>
+      <li><a href="https://www.tagesschau.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=tagesschau.de" alt="">Tagesschau</a></li>
+      <li><a href="https://www.wetter.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=wetter.com" alt="">Wetter.com</a></li>
+      <li><a href="https://www.wochenspiegelonline.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=wochenspiegelonline.de" alt="">Wochenspiegel Saarland</a></li>
+      <li><a href="https://www.zeit.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=zeit.de" alt="">Die Zeit</a></li>
+    </ul>
+  </div>
+
+  <!-- BEHÖRDEN -->
+
+  <div class="card c-teal">
+    <div class="card-header"><div class="card-icon">🏛</div><span class="card-title">Behörden</span></div>
+    <ul>
+      <li><a href="https://www.merzig-wadern.de/Familienportal/Leben-im-Alter/Beratung-Unterst%C3%BCtzung/AG-Altenhilfe-Merzig-e-V-/" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=merzig-wadern.de" alt="">AG Altenhilfe Merzig e.V.</a></li>
+      <li><a href="https://www.arbeitsagentur.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=arbeitsagentur.de" alt="">Bundesagentur für Arbeit</a></li>
+      <li><a href="https://www.bundesregierung.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=bundesregierung.de" alt="">Bundesregierung</a></li>
+      <li><a href="https://www.elster.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=elster.de" alt="">ELSTER (Steuer)</a></li>
+      <li><a href="https://www.merzig.de/rathaus-buergerservice/einwohnermeldeamt/" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=merzig.de" alt="">Einwohnermeldeamt Merzig</a></li>
+      <li><a href="https://www.finanzamt-merzig.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=finanzamt-merzig.de" alt="">Finanzamt Merzig</a></li>
+      <li><a href="https://www.merzig-wadern.de/Zulassung-Verkehr/Fahrerlaubnisrecht/F%C3%BChrerschein/" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=merzig-wadern.de" alt="">Führerscheinstelle</a></li>
+      <li><a href="https://www.jobcenter-merzig-wadern.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=jobcenter-merzig-wadern.de" alt="">Jobcenter Merzig-Wadern</a></li>
+      <li><a href="https://www.jugendamt.merzig-wadern.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=merzig-wadern.de" alt="">Jugendamt Merzig-Wadern</a></li>
+      <li><a href="https://www.merzig-wadern.de/Verwaltung-Politik/Dezernate-Abteilungen/" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=merzig-wadern.de" alt="">Katasteramt Merzig-Wadern</a></li>
+      <li><a href="https://www.merzig-wadern.de/Zulassung-Verkehr/Zulassungstelle/" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=merzig-wadern.de" alt="">KFZ-Zulassungsstelle</a></li>
+      <li><a href="https://www.merzig-wadern.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=merzig-wadern.de" alt="">Landratsamt Merzig-Wadern</a></li>
+      <li><a href="https://www.deutsche-rentenversicherung.de/Saarland/DE/Home/home_node.html" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=deutsche-rentenversicherung.de" alt="">Rentenversicherung Saarland (DRV)</a></li>
+      <li><a href="https://www.saarland.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=saarland.de" alt="">Saarland.de (Landesportal)</a></li>
+      <li><a href="https://www.stadtwerke-merzig.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=stadtwerke-merzig.de" alt="">Stadtwerke Merzig</a></li>
+      <li><a href="https://www.verbraucherzentrale-saarland.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=verbraucherzentrale-saarland.de" alt="">Verbraucherzentrale Saarland</a></li>
+      <li><a href="https://www.vhs-merzig.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=vhs-merzig.de" alt="">Volkshochschule Merzig</a></li>
+    </ul>
+  </div>
+
+  <!-- GESUNDHEIT MERZIG -->
+
+  <div class="card c-green">
+    <div class="card-header"><div class="card-icon">🏥</div><span class="card-title">Gesundheit Merzig</span></div>
+    <ul>
+      <li><a href="https://www.apotheken-umschau.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=apotheken-umschau.de" alt="">Apotheken-Umschau</a></li>
+      <li><a href="https://www.aok.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=aok.de" alt="">AOK</a></li>
+      <li><a href="https://sehen-saar.de/praxis-merzig/" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=sehen-saar.de" alt="">Augenarzt Merzig (Sehen Saar)</a></li>
+      <li><a href="https://www.barmer.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=barmer.de" alt="">Barmer Krankenkasse</a></li>
+      <li><a href="https://www.caritasverband-saar-hochwald.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=caritasverband-saar-hochwald.de" alt="">Caritas Saar-Hochwald</a></li>
+      <li><a href="https://www.doctolib.de/allgemeinmedizin/merzig" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=doctolib.de" alt="">DocToLib Merzig (Termine)</a></li>
+      <li><a href="https://gesundheitscampus-merzig.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=gesundheitscampus-merzig.de" alt="">Gesundheitscampus Merzig</a></li>
+      <li><a href="https://www.hautmedizin-saar.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=hautmedizin-saar.de" alt="">Hautmedizin Saar (Gesundheitscampus)</a></li>
+      <li><a href="https://hno-merzig.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=hno-merzig.de" alt="">HNO-Praxis Rübsteck & Firsov Merzig</a></li>
+      <li><a href="https://www.praxis-kessler.info" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=praxis-kessler.info" alt="">MVZ Hautarzt Dr. Kessler</a></li>
+      <li><a href="https://ihr-hausarzt-merzig.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=ihr-hausarzt-merzig.de" alt="">MVZ Hausarzt Merzig</a></li>
+      <li><a href="https://ihr-hausarzt-stadthalle.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=ihr-hausarzt-stadthalle.de" alt="">MVZ Hausarzt Stadthalle</a></li>
+      <li><a href="https://www.netdoktor.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=netdoktor.de" alt="">NetDoktor (Symptom-Checker)</a></li>
+      <li><a href="https://maps.google.com/?q=Orthopäde+Torstraße+28+Merzig" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=maps.google.com" alt="">Orthopäde Merzig (Torstr. 28)</a></li>
+      <li><a href="https://www.shg-kliniken.de/merzig/" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=shg-kliniken.de" alt="">SHG Klinikum Merzig</a></li>
+      <li><a href="https://www.tk.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=tk.de" alt="">Techniker Krankenkasse</a></li>
+      <li><a href="https://x-care.de/standorte/merzig-stadtmitte/" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=x-care.de" alt="">Xcare Merzig (Radiologie)</a></li>
+      <li><a href="https://x-care.de/standorte/" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=x-care.de" alt="">Xcare Saarland – alle Standorte</a></li>
+    </ul>
+  </div>
+
+  <!-- FREIZEIT MERZIG -->
+
+  <div class="card c-green">
+    <div class="card-header"><div class="card-icon">🎿</div><span class="card-title">Freizeit Merzig</span></div>
+    <ul>
+      <li><a href="https://dasbadmerzig.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=dasbadmerzig.de" alt="">Das Bad Merzig</a></li>
+      <li><a href="https://www.lichtspiele-losheim.de/programm/" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=lichtspiele-losheim.de" alt="">Lichtspiele Losheim (Programm)</a></li>
+      <li><a href="https://www.kino-merzig.de/programm" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=kino-merzig.de" alt="">Odeon Kinocenter Merzig (Programm)</a></li>
+      <li><a href="https://www.ski-club-merzig.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=ski-club-merzig.de" alt="">Ski-Club Merzig</a></li>
+      <li><a href="https://www.tc-merzig.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=tc-merzig.de" alt="">Tennisclub Schwarz-Weiß Merzig</a></li>
+    </ul>
+  </div>
+
+  <!-- CLOUD -->
+
+  <div class="card c-blue">
+    <div class="card-header"><div class="card-icon">☁️</div><span class="card-title">Cloud</span></div>
+    <ul>
+      <li><a href="https://www.dropbox.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=dropbox.com" alt="">Dropbox</a></li>
+      <li><a href="https://www.icloud.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=icloud.com" alt="">iCloud</a></li>
+      <li><a href="https://nextcloud.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=nextcloud.com" alt="">Nextcloud</a></li>
+      <li><a href="https://www.pcloud.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=pcloud.com" alt="">pCloud</a></li>
+    </ul>
+  </div>
+
+  <!-- KÜNSTLICHE INTELLIGENZ -->
+
+  <div class="card c-purple">
+    <div class="card-header"><div class="card-icon">🤖</div><span class="card-title">Künstliche Intelligenz</span></div>
+    <ul>
+      <li><a href="https://chat.openai.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=chat.openai.com" alt="">ChatGPT</a></li>
+      <li><a href="https://claude.ai" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=claude.ai" alt="">Claude</a></li>
+      <li><a href="https://www.perplexity.ai" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=perplexity.ai" alt="">Perplexity</a></li>
+    </ul>
+  </div>
+
+  <!-- RESTAURANTS MERZIG -->
+
+  <div class="card c-red">
+    <div class="card-header"><div class="card-icon">🍽️</div><span class="card-title">Restaurants Merzig</span></div>
+    <ul>
+      <li><a href="https://www.ratsstube-blasius.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=ratsstube-blasius.de" alt="">Blasius (Ratsstube)</a></li>
+      <li><a href="https://www.merzigerbrauhaus.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=merzigerbrauhaus.de" alt="">Brauhaus Merzig</a></li>
+      <li><a href="https://www.ellerhof.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=ellerhof.de" alt="">Ellerhof Merzig</a></li>
+      <li><a href="https://maps.google.com/?q=Griechisches+Restaurant+Zur+Stadthalle+Merzig" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=maps.google.com" alt="">Grieche an der Stadthalle</a></li>
+      <li><a href="https://www.kolpinghausmerzig.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=kolpinghausmerzig.de" alt="">Kolpinghaus Merzig</a></li>
+      <li><a href="https://www.restaurant-kolorit.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=restaurant-kolorit.de" alt="">Kolorit Merzig</a></li>
+      <li><a href="https://roemer-merzig.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=roemer-merzig.de" alt="">Römer Merzig</a></li>
+    </ul>
+  </div>
+
+  <!-- REISE & VERKEHR -->
+
+  <div class="card c-blue">
+    <div class="card-header"><div class="card-icon">✈️</div><span class="card-title">Reise & Verkehr</span></div>
+    <ul>
+      <li><a href="https://www.booking.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=booking.com" alt="">Booking.com</a></li>
+      <li><a href="https://www.bahn.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=bahn.de" alt="">Deutsche Bahn</a></li>
+      <li><a href="https://www.flixbus.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=flixbus.de" alt="">FlixBus</a></li>
+      <li><a href="https://maps.google.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=maps.google.com" alt="">Google Maps</a></li>
+      <li><a href="https://www.mobiliteit.lu/de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=mobiliteit.lu" alt="">Mobiliteit.lu (ÖPNV Luxemburg)</a></li>
+      <li><a href="https://maps.google.com/?q=Montclair+Reisebüro+Merzig+Schankstraße+1" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=maps.google.com" alt="">Reisebüro montClaire Merzig</a></li>
+      <li><a href="https://www.holiday-reisen-krings.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=holiday-reisen-krings.de" alt="">Reisebüro Krings Merzig</a></li>
+      <li><a href="https://www.saarfahrplan.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=saarfahrplan.de" alt="">Saarfahrplan (Bus & Bahn Saarland)</a></li>
+      <li><a href="https://www.tui.com/de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=tui.com" alt="">TUI Reisen</a></li>
+    </ul>
+  </div>
+
+  <!-- BEHÖRDEN LUXEMBURG -->
+
+  <div class="card c-gold">
+    <div class="card-header"><div class="card-icon">🇱🇺</div><span class="card-title">Behörden Luxemburg</span></div>
+    <ul>
+      <li><a href="https://www.adem.public.lu" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=adem.public.lu" alt="">ADEM (Arbeitsverwaltung)</a></li>
+      <li><a href="https://www.css.lu" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=css.lu" alt="">CSS (Krankenversicherung)</a></li>
+      <li><a href="https://guichet.public.lu" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=guichet.public.lu" alt="">Guichet.lu (Bürgerportal)</a></li>
+      <li><a href="https://impotsdirects.public.lu" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=impotsdirects.public.lu" alt="">Impôts (Steuer Luxemburg)</a></li>
+    </ul>
+  </div>
+
+  <!-- NÜTZLICHES -->
+
+  <div class="card c-purple">
+    <div class="card-header"><div class="card-icon">🔧</div><span class="card-title">Nützliches</span></div>
+    <ul>
+      <li><a href="https://www.deepl.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=deepl.com" alt="">DeepL Übersetzer</a></li>
+      <li><a href="https://www.duckduckgo.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=duckduckgo.com" alt="">DuckDuckGo</a></li>
+      <li><a href="https://www.google.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=google.de" alt="">Google</a></li>
+      <li><a href="https://translate.google.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=translate.google.com" alt="">Google Übersetzer</a></li>
+      <li><a href="https://www.wikipedia.org" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=wikipedia.org" alt="">Wikipedia</a></li>
+    </ul>
+  </div>
+
+  <!-- STREAMING & MEDIATHEK -->
+
+  <div class="card c-red">
+    <div class="card-header"><div class="card-icon">📺</div><span class="card-title">Streaming & Mediathek</span></div>
+    <ul>
+      <li><a href="https://www.ardmediathek.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=ardmediathek.de" alt="">ARD Mediathek</a></li>
+      <li><a href="https://www.netflix.com" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=netflix.com" alt="">Netflix</a></li>
+      <li><a href="https://www.sr-mediathek.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=sr-mediathek.de" alt="">SR Mediathek (Saarland)</a></li>
+      <li><a href="https://www.zdf.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=zdf.de" alt="">ZDF Mediathek</a></li>
+    </ul>
+  </div>
+
+  <!-- SICHERHEIT & NOTFALL -->
+
+  <div class="card c-red">
+    <div class="card-header"><div class="card-icon">🚨</div><span class="card-title">Sicherheit & Notfall</span></div>
+    <ul>
+      <li><a href="https://www.bsi.bund.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=bsi.bund.de" alt="">BSI – Bundesamt für IT-Sicherheit</a></li>
+      <li><a href="https://cybr360.saarland/erste-hilfe" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=cybr360.saarland" alt="">Cybr360 – Erste Hilfe bei Cyberangriff</a></li>
+      <li><a href="https://www.saarland.de/polizei/DE/onlinewache/onlinewache_node.html" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=saarland.de" alt="">Online-Wache (Anzeige erstatten)</a></li>
+      <li><a href="https://www.saarland.de/polizei/DE/home/home_node.html" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=saarland.de" alt="">Polizei Saarland</a></li>
+      <li><a href="https://www.saarland.de/polizei/DE/themen-aufgaben/kriminalitaet/zac/zac_node.html" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=saarland.de" alt="">ZAC – Cybercrime Saarland</a></li>
+    </ul>
+  </div>
+
+  <!-- FINANZEN & STEUERN -->
+
+  <div class="card c-gold">
+    <div class="card-header"><div class="card-icon">💶</div><span class="card-title">Finanzen & Steuern</span></div>
+    <ul>
+      <li><a href="https://www.brutto-netto-rechner.info" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=brutto-netto-rechner.info" alt="">Brutto-Netto-Rechner</a></li>
+      <li><a href="https://www.check24.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=check24.de" alt="">Check24 (Versicherung, Strom, Kredit)</a></li>
+      <li><a href="https://www.finanzrechner.org" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=finanzrechner.org" alt="">Finanzrechner (Kredit, Zinsen, Rente)</a></li>
+      <li><a href="https://www.finanztip.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=finanztip.de" alt="">Finanztip (unabhängige Finanzberatung)</a></li>
+      <li><a href="https://www.stiftung-warentest.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=stiftung-warentest.de" alt="">Stiftung Warentest</a></li>
+      <li><a href="https://www.verivox.de" target="_blank" rel="noopener noreferrer"><img class="favicon" src="https://www.google.com/s2/favicons?domain=verivox.de" alt="">Verivox (Energie, Handy, Internet)</a></li>
+    </ul>
+  </div>
+
+</main>
+
+<div class="info-box">
+  <strong>🛡 Sicherheits-Prinzip dieser Seite:</strong> Alle Links hier hast du selbst eingetragen und verifiziert.
+  Wenn du Bank, E-Mail oder Amazon <em>immer nur über diese Seite</em> öffnest, kann dich keine
+  Phishing-Mail täuschen — egal wie echt sie aussieht. Klicke <strong>niemals</strong> auf Links in E-Mails
+  für sensible Seiten, sondern komm immer hierher zurück.
+</div>
+
+<p class="edit-note">💡 Tipp: Diese Datei im Texteditor öffnen → Links anpassen → in Google Drive hochladen</p>
+
+<div class="version-bar">
+  Version 1.1 &nbsp;·&nbsp; Stand: 14. März 2026 &nbsp;·&nbsp; Alle Rubriken alphabetisch sortiert · Suchfunktion hinzugefügt
+</div>
+
+<script>
+  const searchInput = document.getElementById('search');
+  const searchCount = document.getElementById('searchCount');
+  const noResults   = document.getElementById('noResults');
+
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.trim().toLowerCase();
+    let totalVisible = 0;
+
+    document.querySelectorAll('.card').forEach(card => {
+      let cardHasMatch = false;
+      card.querySelectorAll('li').forEach(li => {
+        const a = li.querySelector('a');
+        if (!a) return;
+        const text = a.textContent.trim();
+        if (!q) {
+          li.classList.remove('hidden');
+          // restore original text
+          a.childNodes.forEach(n => { if (n.nodeType === 3) return; });
+          const img = a.querySelector('img');
+          a.innerHTML = '';
+          if (img) a.appendChild(img);
+          a.appendChild(document.createTextNode(' ' + text));
+          cardHasMatch = true;
+        } else if (text.toLowerCase().includes(q)) {
+          li.classList.remove('hidden');
+          cardHasMatch = true;
+          totalVisible++;
+          // highlight match
+          const img = a.querySelector('img');
+          const highlighted = text.replace(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'), '<mark>$1</mark>');
+          a.innerHTML = '';
+          if (img) a.appendChild(img);
+          a.insertAdjacentHTML('beforeend', ' ' + highlighted);
+        } else {
+          li.classList.add('hidden');
+        }
+      });
+      card.classList.toggle('hidden', q !== '' && !cardHasMatch);
+    });
+
+    if (!q) {
+      searchCount.textContent = '';
+      noResults.style.display = 'none';
+    } else if (totalVisible === 0) {
+      searchCount.textContent = 'Kein Treffer';
+      noResults.style.display = 'block';
+    } else {
+      searchCount.textContent = totalVisible + (totalVisible === 1 ? ' Treffer' : ' Treffer');
+      noResults.style.display = 'none';
+    }
+  });
+</script>
+
+</body>
+</html>
+
